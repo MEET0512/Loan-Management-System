@@ -1,0 +1,26 @@
+type Query {
+    # Define queries here
+}
+
+type Mutation {
+    signupUser(username: String!, password: String!, firstName: String!, lastName: String!, email: String!, dateOfBirth: String!, phoneNumber: String!, address: String!, role:String!): User
+    authenticateUser(username: String!, password: String!): AuthResponse
+}
+
+type AuthResponse {
+    token: String
+    message: String
+}
+
+tyoe User {
+ 	userId:Long
+	username:String
+    password:String
+    role:String
+    firstName:String
+    lastName:String
+    email:String
+    dateOfBirth:String
+    phoneNumber:String
+    address:String
+}

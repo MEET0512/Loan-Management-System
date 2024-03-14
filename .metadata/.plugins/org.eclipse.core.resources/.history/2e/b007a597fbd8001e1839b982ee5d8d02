@@ -1,0 +1,9 @@
+package com.patel.LoanSystem.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.patel.LoanSystem.entity.User;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
+}

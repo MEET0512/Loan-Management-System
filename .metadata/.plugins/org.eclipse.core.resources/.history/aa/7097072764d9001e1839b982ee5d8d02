@@ -1,0 +1,68 @@
+package com.patel.LoanSystem.service;
+
+import java.util.HashMap;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.patel.LoanSystem.dto.JwtAuthenticationResponse;
+import com.patel.LoanSystem.dto.SignInRequest;
+import com.patel.LoanSystem.dto.SignUpRequest;
+import com.patel.LoanSystem.entity.Role;
+import com.patel.LoanSystem.entity.User;
+import com.patel.LoanSystem.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class AuthenticationService {
+
+	private final UserRepository userRepo;
+	private final PasswordEncoder encoder;
+	private final AuthenticationManager authenticationManager;
+	private final JwtService jwtService;
+	
+	public User signUp(SignUpRequest signUpRequest) {
+		if(userRepo.findByUsername(signUpRequest.getUsername()).isPresent()) 
+		{
+			return null;
+		}
+		System.out.println(Role.valueOf(signUpRequest.getRole()));
+		Role role = Role.valueOf(signUpRequest.getRole());
+		User user = User.builder()
+						.username(signUpRequest.getUsername())
+						.password(encoder.encode(signUpRequest.getPassword()))
+						.firstName(signUpRequest.getFirstName())
+						.lastName(signUpRequest.getLastName())
+						.email(signUpRequest.getEmail())
+						.dateOfBirth(signUpRequest.getDateOfBirth())
+						.phoneNumber(signUpRequest.getPhoneNumber())
+						.address(signUpRequest.getAddress())
+						.role(role)
+						.build();
+		return userRepo.save(user);
+	}
+	
+	public JwtAuthenticationResponse signIn(SignInRequest signInRequest) {
+		try {
+			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword()));
+		} catch(Exception e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+		
+		var user = userRepo.findByUsername(signInRequest.getUsername()).orElseThrow(() -> new IllegalArgumentException("Invalid username or password"));
+		var token = jwtService.generatedToken((UserDetails) user);
+		var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), (UserDetails) user);
+		
+		JwtAuthenticationResponse authenticationResponse = new JwtAuthenticationResponse();
+		authenticationResponse.setToken(token);
+		authenticationResponse.setRefreshToken(refreshToken);
+		
+		return authenticationResponse;
+	}
+}

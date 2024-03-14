@@ -1,0 +1,13 @@
+package com.patel.LoanSystem.service;
+
+
+import com.patel.LoanSystem.dto.personalInfoRequest;
+import com.patel.LoanSystem.entity.PersonalInfo;
+
+public interface PersonalInfoService {
+
+	PersonalInfo getPersonalInfo(String username);
+
+	PersonalInfo addOrUpdatePersonalInfo(personalInfoRequest request);
+
+}

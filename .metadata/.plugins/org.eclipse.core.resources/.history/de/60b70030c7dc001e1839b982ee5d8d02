@@ -1,0 +1,5 @@
+package com.patel.LoanSystem.dto;
+
+public class PaymentRequest {
+
+}

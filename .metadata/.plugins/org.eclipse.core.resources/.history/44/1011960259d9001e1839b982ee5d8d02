@@ -1,0 +1,5 @@
+package com.patel.LoanSystem.configuration;
+
+public class AuthenticationFilter {
+
+}

@@ -1,0 +1,11 @@
+package com.patel.LoanSystem.service;
+
+import com.patel.LoanSystem.dto.LoanRequest;
+import com.patel.LoanSystem.entity.Loan;
+
+public interface LoanService {
+
+	Loan addLoan(LoanRequest loanRequest);
+	String generateLoanNumber()
+
+}

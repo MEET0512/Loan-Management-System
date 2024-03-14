@@ -1,0 +1,28 @@
+package com.patel.LoanSystem.service;
+
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.patel.LoanSystem.entity.PersonalInfo;
+import com.patel.LoanSystem.entity.User;
+import com.patel.LoanSystem.repository.PersonalInfoRepository;
+import com.patel.LoanSystem.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class ImpPersonalInfoService implements PersonalInfoService {
+
+	private final UserRepository  userRepository;
+	private final PersonalInfoRepository infoRepository;
+	
+	@Override
+	public PersonalInfo getPersonalInfo(String username) {
+		User user = userRepository.findByUsername(username)
+					.orElseThrow(() -> new UsernameNotFoundException("User does not exists."));
+		PersonalInfo info = infoRepository.findByUser(user);
+		return info;
+	}
+
+}

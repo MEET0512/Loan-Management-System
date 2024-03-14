@@ -1,0 +1,60 @@
+package com.patel.LoanSystem.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.patel.LoanSystem.dto.UserRequest;
+import com.patel.LoanSystem.entity.User;
+import com.patel.LoanSystem.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequestMapping("/api/customer")
+@RequiredArgsConstructor
+public class UserController {
+
+	private final UserService service;
+	
+	@GetMapping("/userDetatils")
+	public ResponseEntity<User> getUserDetails(@RequestHeader("Authorization") String token) {
+		User user = service.getUserDetails(token);
+		if(user != null) {
+			return ResponseEntity.ok(user);
+		}
+		return ResponseEntity.badRequest().build();
+	}
+	
+	@PutMapping("/update/{userId}")
+	public ResponseEntity<?> updateUser (
+			@PathVariable("userId") Long userId,
+			@RequestBody UserRequest request
+			) {
+		User updatedUser = service.updateUser(userId, request);
+		
+		if(updatedUser != null) {
+			return ResponseEntity.ok(updatedUser);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	@DeleteMapping("/{userId}")
+	public ResponseEntity<?> deleteUser (@PathVariable("userId") Long userId) {
+		try {
+			service.deleteUser(userId);
+			return ResponseEntity.ok("User Deleteed!");
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+}

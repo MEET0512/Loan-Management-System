@@ -1,0 +1,5 @@
+package com.patel.LoanSystem.repository;
+
+public interface DocumentRepository {
+
+}

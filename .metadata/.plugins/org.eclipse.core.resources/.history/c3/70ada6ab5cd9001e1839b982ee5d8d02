@@ -1,0 +1,4 @@
+type AuthResponse {
+	token:String
+	refreshToken:String
+}

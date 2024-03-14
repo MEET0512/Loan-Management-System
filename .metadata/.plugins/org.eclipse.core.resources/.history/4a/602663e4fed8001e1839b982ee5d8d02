@@ -1,0 +1,9 @@
+# Database Configuration
+spring.datasource.url=jdbc:postgresql://localhost:5432/loan-system
+spring.datasource.username=postgres
+spring.datasource.password=Meetu@12522
+spring.jpa.hibernate.ddl-auto=update
+
+# Redis Configuration
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
